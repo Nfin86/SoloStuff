@@ -16,7 +16,7 @@ namespace MMTApp
         private string? currentFilePath = null;
         private int playbackCount = 1;
         private bool stopPlayback = false;
-
+        private bool isPaused = false;
         private const int HOTKEY_RECORD_ID = 1;
         private const int HOTKEY_PLAY_ID = 2;
         private const int HOTKEY_STOP_RECORD_ID = 3;
@@ -25,6 +25,9 @@ namespace MMTApp
         private uint playHotkey = 0x75; // F6
         private uint stopRecordHotkey = 0x76; // F7
         private uint stopPlaybackHotkey = 0x51; // Q (with Ctrl)
+        private const int HOTKEY_PAUSE_ID = 5;
+        private uint pauseHotkey = 0x77; // F8
+        private uint pauseModifier = 0;  // No modifier by default
         private uint recordModifier = 0;
         private uint playModifier = 0;
         private uint stopRecordModifier = 0;
@@ -162,6 +165,7 @@ namespace MMTApp
             RegisterHotKey(this.Handle, HOTKEY_PLAY_ID, playModifier, playHotkey);
             RegisterHotKey(this.Handle, HOTKEY_STOP_RECORD_ID, stopRecordModifier, stopRecordHotkey);
             RegisterHotKey(this.Handle, HOTKEY_STOP_PLAYBACK_ID, stopPlaybackModifier, stopPlaybackHotkey);
+            RegisterHotKey(this.Handle, HOTKEY_PAUSE_ID, pauseModifier, pauseHotkey);
         }
 
         private void UnregisterHotkeys()
@@ -170,6 +174,7 @@ namespace MMTApp
             UnregisterHotKey(this.Handle, HOTKEY_PLAY_ID);
             UnregisterHotKey(this.Handle, HOTKEY_STOP_RECORD_ID);
             UnregisterHotKey(this.Handle, HOTKEY_STOP_PLAYBACK_ID);
+            UnregisterHotKey(this.Handle, HOTKEY_PAUSE_ID);
         }
 
         protected override void WndProc(ref Message m)
@@ -187,6 +192,9 @@ namespace MMTApp
                         break;
                     case HOTKEY_STOP_RECORD_ID:
                         if (isRecording) StopButton_Click(this, EventArgs.Empty);
+                        break;
+                    case HOTKEY_PAUSE_ID:
+                        if (!isRecording) isPaused = !isPaused; // Toggle pause during playback
                         break;
                     case HOTKEY_STOP_PLAYBACK_ID:
                         stopPlayback = true;
@@ -339,6 +347,19 @@ namespace MMTApp
         hotkeysForm.Text = "Hotkeys";
         hotkeysForm.Size = new System.Drawing.Size(400, 300);
 
+        Label pauseLabel = new Label { Text = "Pause/Resume:", Location = new System.Drawing.Point(20, 140) };
+hotkeysForm.Controls.Add(pauseLabel);
+
+TextBox pauseBox = new TextBox
+{
+    Text = "F8",
+    Location = new System.Drawing.Point(300, 138),
+    Width = 80,
+    ReadOnly = true
+};
+pauseBox.Click += PauseBox_Click;
+hotkeysForm.Controls.Add(pauseBox);
+
         Label recordLabel = new Label { Text = "Record:", Location = new System.Drawing.Point(20, 20) };
         hotkeysForm.Controls.Add(recordLabel);
 
@@ -392,6 +413,8 @@ namespace MMTApp
         hotkeysForm.Controls.Add(stopPlaybackBox);
 
         hotkeysForm.ShowDialog();
+
+        
     }
 }
 
@@ -439,6 +462,16 @@ private void StopPlaybackBox_Click(object sender, EventArgs e)
     }
 }
 
+private void PauseBox_Click(object sender, EventArgs e)
+{
+    TextBox box = (TextBox)sender;
+    var (newHotkey, newModifier) = SetupHotkeyBox(box, HOTKEY_PAUSE_ID);
+    if (newHotkey != 0)
+    {
+        pauseHotkey = newHotkey;
+        pauseModifier = newModifier;
+    }
+}
         private (uint, uint) SetupHotkeyBox(TextBox box, int hotkeyId)
         {
             using (HotkeyDialog dialog = new HotkeyDialog())
@@ -508,24 +541,30 @@ private void StopPlaybackBox_Click(object sender, EventArgs e)
                 var ev = recordedEvents[i];
                 while (playbackStopwatch.ElapsedMilliseconds < ev.Timestamp && !stopPlayback)
                 {
-                    System.Threading.Thread.Sleep(1);
-                }
-                if (stopPlayback) break;
+                    if (isPaused)
+                    {
+                        System.Threading.Thread.Sleep(1); // Wait while paused
+                        continue;
+        }
+        System.Threading.Thread.Sleep(1);
+    }
+    if (stopPlayback) break;
+    if (isPaused) continue; // Skip event if paused
 
-                SetCursorPos(ev.X, ev.Y);
-                if (ev.LeftDown != lastLeftDown)
-                {
-                    if (ev.LeftDown) mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, IntPtr.Zero);
-                    else mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, IntPtr.Zero);
-                    lastLeftDown = ev.LeftDown;
-                }
-                if (ev.RightDown != lastRightDown)
-                {
-                    if (ev.RightDown) mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, IntPtr.Zero);
-                    else mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, IntPtr.Zero);
-                    lastRightDown = ev.RightDown;
-                }
-            }
+    SetCursorPos(ev.X, ev.Y);
+    if (ev.LeftDown != lastLeftDown)
+    {
+        if (ev.LeftDown) mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, IntPtr.Zero);
+        else mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, IntPtr.Zero);
+        lastLeftDown = ev.LeftDown;
+    }
+    if (ev.RightDown != lastRightDown)
+    {
+        if (ev.RightDown) mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, IntPtr.Zero);
+        else mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, IntPtr.Zero);
+        lastRightDown = ev.RightDown;
+    }
+}
         }
     }
 }

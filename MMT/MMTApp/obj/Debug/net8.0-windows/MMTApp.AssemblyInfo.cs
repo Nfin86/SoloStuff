@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MMTApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a49ab70888d8e86da99345a7136c481e06d7eca5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db2307da41f1780cea3ade9a3482ac74fda17eac")]
 [assembly: System.Reflection.AssemblyProductAttribute("MMTApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MMTApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
