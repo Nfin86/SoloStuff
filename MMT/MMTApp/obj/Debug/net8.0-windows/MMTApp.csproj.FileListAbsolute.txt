@@ -1,0 +1,15 @@
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\bin\Debug\net8.0-windows\MMTApp.exe
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\bin\Debug\net8.0-windows\MMTApp.deps.json
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\bin\Debug\net8.0-windows\MMTApp.runtimeconfig.json
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\bin\Debug\net8.0-windows\MMTApp.dll
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\bin\Debug\net8.0-windows\MMTApp.pdb
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\MMTApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\MMTApp.AssemblyInfoInputs.cache
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\MMTApp.AssemblyInfo.cs
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\MMTApp.csproj.CoreCompileInputs.cache
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\MMTApp.sourcelink.json
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\MMTApp.dll
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\refint\MMTApp.dll
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\MMTApp.pdb
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\MMTApp.genruntimeconfig.cache
+C:\Users\B\Desktop\SoloStuff\MMT\MMTApp\obj\Debug\net8.0-windows\ref\MMTApp.dll
